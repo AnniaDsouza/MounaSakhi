@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SiGML Player</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        #animation {
+            width: 300px;
+            height: 300px;
+            border: 1px solid #ccc;
+            position: relative;
+            display: none; /* Initially hidden */
+        }
+        .animated {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 150, 255, 0.5);
+            border-radius: 50%;
+            animation: pulse 1s infinite;
+        }
+        .avatar {
+            position: absolute;
+            width: 80px; /* Adjust size as needed */
+            height: 80px; /* Adjust size as needed */
+            background-color: #ff9900; /* Placeholder color for the avatar */
+            border-radius: 50%; /* Circular avatar */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* Center the avatar */
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <input type="hidden" id="sigml_input" />
+    <button id="submit_button" onclick="playAnimation()">Play</button>
+    <div id="animation">
+        <div class="avatar"></div> <!-- Avatar element -->
+    </div>
+
+    <script>
+        function playAnimation() {
+            const sigmlData = document.getElementById("sigml_input").value;
+
+            // Example SiGML processing logic
+            if (sigmlData) {
+                // Display the animation area
+                const animationArea = document.getElementById("animation");
+                animationArea.style.display = 'block';
+
+                // Simulating animation based on SiGML data
+                console.log("Processing SiGML data:", sigmlData);
+                
+                // Add an animated element to the animation area
+                const animatedElement = document.createElement("div");
+                animatedElement.classList.add("animated");
+                animationArea.appendChild(animatedElement);
+                
+                // Optional: Add logic to handle different animations based on sigmlData
+                // Example: if (sigmlData.includes('someCondition')) { ... }
+            } else {
+                alert("No SiGML data found!");
+            }
+        }
+
+        // Function to load SiGML data (for demonstration)
+        function loadSiGMLData() {
+            const sigmlData = `
+                <sigml>
+                    <hns_sign gloss="hello">
+                        <hamnosys_nonmanual></hamnosys_nonmanual>
+                        <hamnosys_manual>
+                            <hamfinger2/>
+                            <hamthumbacrossmod/>
+                            <hamextfingeru/>
+                            <hampalmu/>
+                            <hamchest/>
+                            <hamclose/>
+                            <hammoveo/>
+                            <hamsmallmod/>
+                        </hamnosys_manual>
+                    </hns_sign>
+                </sigml>
+            `;
+            document.getElementById("sigml_input").value = sigmlData;
+        }
+
+        // Load SiGML data on page load for demonstration
+        window.onload = loadSiGMLData;
+    </script>
+</body>
+</html>
