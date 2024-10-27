@@ -130,7 +130,7 @@ class HomePage extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              AppLocalizations.getTranslation('welcome', selectedLanguage) ?? 'ನಮಸ್ಕಾರ',
+                              AppLocalizations.getTranslation('ನಮಸ್ಕಾರ', selectedLanguage) ?? 'Welcome',
                               style: TextStyle(
                                 fontSize: 25,
                                 color: Colors.white,
