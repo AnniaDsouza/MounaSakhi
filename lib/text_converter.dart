@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'SigmlPlayerPage.dart';
+import '../database/db_helper.dart';
+import 'SigmlPlayerPage.dart'; // Import DBHelper
 
 class TextConverterPage extends StatefulWidget {
   final String selectedLanguage;
-
   TextConverterPage({required this.selectedLanguage});
 
   @override
@@ -19,26 +19,17 @@ class _TextConverterPageState extends State<TextConverterPage> {
     super.initState();
   }
 
-  // Simulating data fetching from a database based on user input
-  String fetchDataFromDatabase(String word) {
-    // Mapping of words to SiGML data
-    Map<String, String> sigmlDatabase = {
-      'one': '''<?xml version="1.0" encoding="utf-8"?> 
-                <sigml> 
-                  <hns_sign gloss="one"> 
-                    <hamnosys_nonman />
-                  </hns_sign> 
-                </sigml>''',
-      'two': '''<?xml version="1.0" encoding="utf-8"?> 
-                <sigml> 
-                  <hns_sign gloss="two"> 
-                    <hamnosys_nonman />
-                  </hns_sign> 
-                </sigml>''',
-      // Add more mappings here as needed
-    };
+  Future<String> fetchDataFromDatabase(String word) async {
+    DBHelper dbHelper = DBHelper();
+    // Get the SigmlFile object for the word
+    final sigmlFile = await dbHelper.getSigmlFileByWord(word.toLowerCase());
 
-    return sigmlDatabase[word.toLowerCase()] ?? "No matching SiGML file found!";
+    // Check if sigmlFile is null, and if not, return its sigmlData as a String
+    if (sigmlFile != null) {
+      return sigmlFile.sigmlData; // Return the actual sigmlData string
+    } else {
+      return "No matching SiGML file found!"; // Return a default message if no matching file
+    }
   }
 
   void navigateToSigmlPlayer(String sigmlData) {
@@ -55,7 +46,7 @@ class _TextConverterPageState extends State<TextConverterPage> {
       isLoading = true;
     });
 
-    String sigmlText = fetchDataFromDatabase(enteredWord);
+    String sigmlText = await fetchDataFromDatabase(enteredWord);
 
     setState(() {
       isLoading = false;
@@ -64,7 +55,6 @@ class _TextConverterPageState extends State<TextConverterPage> {
     if (sigmlText != "No matching SiGML file found!") {
       navigateToSigmlPlayer(sigmlText);
     } else {
-      // Show an alert if no SiGML data found
       showDialog(
         context: context,
         builder: (context) {
@@ -95,7 +85,6 @@ class _TextConverterPageState extends State<TextConverterPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Text input for user to enter a word
             TextField(
               onChanged: (value) {
                 setState(() {
@@ -108,8 +97,6 @@ class _TextConverterPageState extends State<TextConverterPage> {
               ),
             ),
             SizedBox(height: 20),
-
-            // Show loading indicator if fetching data
             if (isLoading)
               CircularProgressIndicator()
             else

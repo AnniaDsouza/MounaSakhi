@@ -18,7 +18,14 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData.light(), // Remove dark theme handling
+      theme: ThemeData.light().copyWith(
+        primaryColor: Color(0xFF7ede29), // Light green primary color
+        scaffoldBackgroundColor: Colors.black87, // Set dark background
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.black,
+          elevation: 0,
+        ),
+      ),
       home: HomePage(
         selectedLanguage: _selectedLanguage,
         onLanguageChanged: (String newLanguage) {
@@ -58,13 +65,13 @@ class HomePage extends StatelessWidget {
         ),
       ),
       drawer: Drawer(
-        backgroundColor: Color(0xFF4C4C4C),//Color(0xFF4C4C4C), // Set consistent background color
+        backgroundColor: Color(0xFF4C4C4C), // Set consistent background color
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
             DrawerHeader(
               decoration: BoxDecoration(
-                color: Colors.green.shade700,
+                color: Color(0xFF7318d0), // Purple header background
               ),
               child: Text(
                 'Menu',
@@ -75,16 +82,16 @@ class HomePage extends StatelessWidget {
               ),
             ),
             ListTile(
-              leading: Icon(Icons.language),
-              title: Text('Languages'),
+              leading: Icon(Icons.language, color: Colors.white),
+              title: Text('Languages', style: TextStyle(color: Colors.white)),
               onTap: () {
                 Navigator.pop(context); // Close the drawer
                 _showLanguageOptions(context);
               },
             ),
             ListTile(
-              leading: Icon(Icons.person),
-              title: Text('Profile'),
+              leading: Icon(Icons.person, color: Colors.white),
+              title: Text('Profile', style: TextStyle(color: Colors.white)),
               onTap: () {
                 Navigator.pop(context); // Close the drawer
               },
@@ -116,7 +123,7 @@ class HomePage extends StatelessWidget {
                       Container(
                         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
                         decoration: BoxDecoration(
-                          color: Color(0xFF4CAF50),
+                          color: Color(0xFF7ede29), // Light green background for welcome text
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Column(
@@ -154,7 +161,7 @@ class HomePage extends StatelessWidget {
                           );
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFF58CC02), // Button background color
+                          backgroundColor: Color(0xFFfc770b), // Orange button color
                           padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(25),
@@ -186,7 +193,7 @@ class HomePage extends StatelessWidget {
       builder: (context) {
         return AlertDialog(
           title: Text(
-            AppLocalizations.getTranslation('select_language_title', selectedLanguage) ?? '',
+            AppLocalizations.getTranslation('select_language_title', selectedLanguage) ?? 'Select Language',
             style: TextStyle(color: Colors.black), // Change color for readability
           ),
           content: Container(
@@ -213,4 +220,3 @@ class HomePage extends StatelessWidget {
     );
   }
 }
-//Colors: #fb347f, #fc770b, #fde22e, #7ede29, #7318d0
