@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 class SigmlPlayerPage extends StatefulWidget {
-  final String sigmlFileName;
+  final String sigmlData;
 
-  SigmlPlayerPage({required this.sigmlFileName});
+  SigmlPlayerPage({required this.sigmlData});
 
   @override
   _SigmlPlayerPageState createState() => _SigmlPlayerPageState();
@@ -12,14 +12,14 @@ class SigmlPlayerPage extends StatefulWidget {
 
 class _SigmlPlayerPageState extends State<SigmlPlayerPage> {
   late InAppWebViewController _webViewController;
-  String? _selectedAvatar; // Store the selected avatar
+  String? _selectedAvatar;
 
   final List<String> _avatars = [
     'anna', 'marc', 'francoise', 'luna', 'siggi',
     'robotboy', 'beatrice', 'genie', 'otis', 'darshan',
     'candy', 'max', 'carmen', 'monkey', 'dino',
     'dinoex', 'dinototo', 'bahia'
-  ]; // Avatar options from the dropdown
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +43,10 @@ class _SigmlPlayerPageState extends State<SigmlPlayerPage> {
               },
               onLoadStop: (controller, url) async {
                 await _modifyPageDisplay();
-                _sendSigmlFile(widget.sigmlFileName);
+                _sendSigmlData(widget.sigmlData);
+                if (_selectedAvatar != null) {
+                  _sendAvatarSelectionToWebView(_selectedAvatar!);
+                }
               },
               onLoadError: (controller, url, code, message) {
                 print("Load error: $message");
@@ -51,7 +54,7 @@ class _SigmlPlayerPageState extends State<SigmlPlayerPage> {
             ),
           ),
           SizedBox(height: 10),
-          _buildAvatarDropdown(), // Dropdown for avatar selection
+          _buildAvatarDropdown(),
         ],
       ),
     );
@@ -59,47 +62,59 @@ class _SigmlPlayerPageState extends State<SigmlPlayerPage> {
 
   Future<void> _modifyPageDisplay() async {
     await _webViewController.evaluateJavascript(source: '''
-      var bodyElements = document.body.children;
-      for (var i = 0; i < bodyElements.length; i++) {
-        var element = bodyElements[i];
-        if (element.tagName.toLowerCase() !== 'table') {
-          element.style.display = 'none'; // Hide all except table
+      (function() {
+        try {
+          var bodyElements = document.body.children;
+          for (var i = 0; i < bodyElements.length; i++) {
+            var element = bodyElements[i];
+            if (element.tagName.toLowerCase() !== 'table') {
+              element.style.display = 'none';
+            }
+          }
+          
+          var table = document.querySelector('table');
+          if (table) {
+            table.style.display = 'table';
+            var firstTd = table.querySelector('td:first-child');
+            if (firstTd) {
+              firstTd.style.width = '100vw';
+              firstTd.style.height = '100vh';
+              firstTd.style.overflow = 'hidden';
+              firstTd.style.display = 'block';
+            }
+            
+            var lastTd = table.querySelector('td:last-child');
+            if (lastTd) {
+              lastTd.style.display = 'none';
+            }
+          }
+        } catch (error) {
+          console.error("Error modifying page display:", error);
         }
-      }
-
-      var table = document.querySelector('table');
-      if (table) {
-        table.style.display = 'table';
-      }
-
-      var lastTd = table.querySelectorAll('td:last-child');
-      if (lastTd.length > 0) {
-        lastTd[lastTd.length - 1].style.display = 'none';
-      }
-
-      var firstTd = table.querySelector('td:first-child');
-      if (firstTd) {
-        firstTd.style.width = '100vw';
-        firstTd.style.height = '100vh';
-        firstTd.style.overflow = 'hidden';
-        firstTd.style.display = 'block';
-      }
-
-      console.log(document.body.innerHTML);
+      })();
     ''');
   }
 
-  void _sendSigmlFile(String fileName) {
-    String sigmlData = fileName; // Use the provided SiGML data
-
-    // Inject JavaScript to update the page with SiGML data
+  void _sendSigmlData(String sigmlData) {
     _webViewController.evaluateJavascript(source: '''
-      document.getElementById("sigml_input").value = `$sigmlData`;
-      document.getElementById("submit_button").click();
+      (function() {
+        try {
+          var sigmlTextarea = document.querySelector(".txtaSiGMLText.av0");
+          var playButton = document.querySelector(".bttnPlaySiGMLText.av0");
+
+          if (sigmlTextarea && playButton) {
+            sigmlTextarea.value = `$sigmlData`;
+            playButton.click();
+          } else {
+            console.log("SiGML textarea or play button not found.");
+          }
+        } catch (error) {
+          console.error("Error sending SiGML data:", error);
+        }
+      })();
     ''');
   }
 
-  // Dropdown for avatar selection
   Widget _buildAvatarDropdown() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -118,47 +133,28 @@ class _SigmlPlayerPageState extends State<SigmlPlayerPage> {
             _selectedAvatar = value;
           });
           if (value != null) {
-            _sendAvatarSelectionToWebView(value); // Send the selected avatar to the WebView
+            _sendAvatarSelectionToWebView(value);
           }
         },
       ),
     );
   }
 
-  // Send the selected avatar value to the WebView
   void _sendAvatarSelectionToWebView(String avatar) {
     _webViewController.evaluateJavascript(source: '''
-      var avatarDropdown = document.querySelector("select.menuAv.av0");
-      if (avatarDropdown) {
-        avatarDropdown.value = "$avatar"; // Set the avatar dropdown value
-        avatarDropdown.dispatchEvent(new Event('change')); // Trigger change event
-      } else {
-        console.log("Avatar selector not found");
-      }
+      (function() {
+        try {
+          var avatarDropdown = document.querySelector("select.menuAv.av0");
+          if (avatarDropdown) {
+            avatarDropdown.value = "$avatar";
+            avatarDropdown.dispatchEvent(new Event('change'));
+          } else {
+            console.log("Avatar selector not found.");
+          }
+        } catch (error) {
+          console.error("Error selecting avatar:", error);
+        }
+      })();
     ''');
   }
 }
-
-
-// <sigml>
-
-// 	<hns_sign gloss="hello">
-// 		<hamnosys_nonmanual>
-// 			<hnm_mouthpicture picture="hVlU"/>
-// 		</hamnosys_nonmanual>
-// 		<hamnosys_manual>
-// 			<hamflathand/>
-// 			<hamthumboutmod/>
-// 			<hambetween/>
-// 			<hamfinger2345/>
-// 			<hamextfingeru/>
-// 			<hampalmd/>
-// 			<hamshouldertop/>
-// 			<hamlrat/>
-// 			<hamarmextended/>
-// 			<hamswinging/>
-// 			<hamrepeatfromstart/>
-// 		</hamnosys_manual>
-// 	</hns_sign>
-
-// </sigml>

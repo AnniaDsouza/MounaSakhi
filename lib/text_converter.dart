@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'SigmlPlayerPage.dart'; // Ensure you import the SigmlPlayerPage
+import 'SigmlPlayerPage.dart';
 
 class TextConverterPage extends StatefulWidget {
   final String selectedLanguage;
@@ -12,6 +12,7 @@ class TextConverterPage extends StatefulWidget {
 
 class _TextConverterPageState extends State<TextConverterPage> {
   String enteredWord = '';
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -19,27 +20,67 @@ class _TextConverterPageState extends State<TextConverterPage> {
   }
 
   // Simulating data fetching from a database based on user input
-  String fetchDataFromDatabase() {
-    // Example: Fetching SiGML data based on user input
-    if (enteredWord.toLowerCase() == 'one') {
-      return '''<?xml version="1.0" encoding="utf-8"?> 
-          <sigml> 
-            <hns_sign gloss="one"> 
-              <hamnosys_nonman />
-            </hns_sign> 
-          </sigml>''';
-    } else {
-      return "No matching SiGML file found!";
-    }
+  String fetchDataFromDatabase(String word) {
+    // Mapping of words to SiGML data
+    Map<String, String> sigmlDatabase = {
+      'one': '''<?xml version="1.0" encoding="utf-8"?> 
+                <sigml> 
+                  <hns_sign gloss="one"> 
+                    <hamnosys_nonman />
+                  </hns_sign> 
+                </sigml>''',
+      'two': '''<?xml version="1.0" encoding="utf-8"?> 
+                <sigml> 
+                  <hns_sign gloss="two"> 
+                    <hamnosys_nonman />
+                  </hns_sign> 
+                </sigml>''',
+      // Add more mappings here as needed
+    };
+
+    return sigmlDatabase[word.toLowerCase()] ?? "No matching SiGML file found!";
   }
 
-  void navigateToSigmlPlayer(String sigmlText) {
+  void navigateToSigmlPlayer(String sigmlData) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => SigmlPlayerPage(sigmlFileName: sigmlText),
+        builder: (context) => SigmlPlayerPage(sigmlData: sigmlData),
       ),
     );
+  }
+
+  void handleConversion() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    String sigmlText = fetchDataFromDatabase(enteredWord);
+
+    setState(() {
+      isLoading = false;
+    });
+
+    if (sigmlText != "No matching SiGML file found!") {
+      navigateToSigmlPlayer(sigmlText);
+    } else {
+      // Show an alert if no SiGML data found
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Error'),
+            content: Text(sigmlText),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 
   @override
@@ -67,34 +108,15 @@ class _TextConverterPageState extends State<TextConverterPage> {
               ),
             ),
             SizedBox(height: 20),
-            
-            // Button to fetch the SiGML file based on input
-            ElevatedButton(
-              onPressed: () {
-                String sigmlText = fetchDataFromDatabase();
-                if (sigmlText != "No matching SiGML file found!") {
-                  navigateToSigmlPlayer(sigmlText);
-                } else {
-                  // Show an alert if no SiGML data found
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        title: Text('Error'),
-                        content: Text(sigmlText),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.of(context).pop(),
-                            child: Text('OK'),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                }
-              },
-              child: Text('Convert to ISL'),
-            ),
+
+            // Show loading indicator if fetching data
+            if (isLoading)
+              CircularProgressIndicator()
+            else
+              ElevatedButton(
+                onPressed: enteredWord.isNotEmpty ? handleConversion : null,
+                child: Text('Convert to ISL'),
+              ),
           ],
         ),
       ),

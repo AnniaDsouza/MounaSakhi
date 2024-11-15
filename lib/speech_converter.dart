@@ -60,11 +60,11 @@ class _SpeechConverterPageState extends State<SpeechConverterPage> {
   }
 
   void _navigateToSigmlPlayer() {
-    // Navigate to SigmlPlayerPage with the recognized text as the filename
+    // Navigate to SigmlPlayerPage with the recognized text as the sigmlData
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => SigmlPlayerPage(sigmlFileName: 'hello.sigml'), // You can use _text to dynamically change the file name
+        builder: (context) => SigmlPlayerPage(sigmlData: 'hello.sigml'), // You can use _text to dynamically change the sigmlData
       ),
     );
   }
