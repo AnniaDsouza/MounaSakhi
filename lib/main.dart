@@ -2,8 +2,37 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart'; // Import Lottie
 import 'selection_page.dart'; // Import your updated SelectionPage
 import 'localization.dart'; // Import your localization file
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'package:flutter/foundation.dart';  // Import this for kIsWeb
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  // Initialize Firebase based on platform
+  if (kIsWeb) {
+    // Use web-specific Firebase options
+    await Firebase.initializeApp(
+      options: FirebaseOptions(
+        apiKey: "AIzaSyBitrezQLOu7apcvGgwCisHKFIDQ42fXpE",
+        authDomain: "mounasakhi-648e9.firebaseapp.com",
+        projectId: "mounasakhi-648e9",
+        storageBucket: "mounasakhi-648e9.appspot.com",
+        messagingSenderId: "802366045175",
+        appId: "1:802366045175:web:0483c396873de41215ccf2",
+        measurementId: "G-F3BDS4PBM8" // Add measurementId for web if needed
+      ),
+    );
+  } else {
+    // Initialize Firebase for other platforms (Android/iOS)
+    await Firebase.initializeApp();
+  }
+   try {
+    await Firebase.initializeApp();
+    print('Firebase successfully initialized!');
+  } catch (e) {
+    print('Firebase initialization failed: $e');
+  }
   runApp(MyApp());
 }
 
@@ -11,6 +40,7 @@ class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
 }
+
 
 class _MyAppState extends State<MyApp> {
   String _selectedLanguage = 'en'; // Default language
