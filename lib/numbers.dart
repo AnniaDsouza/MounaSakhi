@@ -29,7 +29,7 @@ class NumbersPage extends StatelessWidget {
         title: Text(selectedLanguage == 'en' ? 'Numbers' : 'ಸಂಖ್ಯೆಗಳು'), // Title based on selected language
       ),
       body: Container(
-        color: Colors.black87, // Set background color to black87
+        color: Color(0xFF222222), // Set background color to black87
         child: NumberFlipCard(isEnglish: selectedLanguage == 'en', numberData: numberData), // Pass language flag and number data
       ),
     );

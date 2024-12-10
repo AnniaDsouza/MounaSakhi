@@ -24,10 +24,10 @@ class LearnPage extends StatelessWidget {
             Navigator.pop(context); // Navigates back to the previous screen
           },
         ),
-        backgroundColor: Colors.black54, // Matches the dark style in the UI
+        backgroundColor: Color.fromARGB(255, 52, 52, 52), // Matches the dark style in the UI
       ),
       body: Container(
-        color: Colors.black87, // Set background color to #4c4c4c
+        color: Color(0xFF222222), // Set background color to #4c4c4c
         child: Column(
           children: [
             // Add the Lottie animation here
@@ -43,7 +43,7 @@ class LearnPage extends StatelessWidget {
               context,
               title: _getLocalizedText('Alphabets'),
               icon: _getIconForCategory('Alphabets'),
-              color: Colors.blueAccent,
+              color: Colors.pink,
               onTap: () {
                 Navigator.push(
                   context,
@@ -57,7 +57,7 @@ class LearnPage extends StatelessWidget {
               context,
               title: _getLocalizedText('Numbers'),
               icon: _getIconForCategory('Numbers'),
-              color: Colors.blue,
+              color: Colors.greenAccent,
               onTap: () {
                 Navigator.push(
                   context,
@@ -71,7 +71,7 @@ class LearnPage extends StatelessWidget {
               context,
               title: _getLocalizedText('Words'),
               icon: _getIconForCategory('Words'),
-              color: Colors.redAccent,
+              color: Colors.blue,
               onTap: () {
                 Navigator.push(
                   context,
@@ -85,7 +85,7 @@ class LearnPage extends StatelessWidget {
               context,
               title: _getLocalizedText('Sentences'),
               icon: _getIconForCategory('Sentences'),
-              color: Colors.lightBlue,
+              color: Colors.purpleAccent,
               onTap: () {
                 Navigator.push(
                   context,
