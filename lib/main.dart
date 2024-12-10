@@ -49,10 +49,10 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData.light().copyWith(
-        primaryColor: Color(0xFF7ede29), // Light green primary color
-        scaffoldBackgroundColor: Colors.black87, // Set dark background
+        primaryColor: Color(0xFF58CC02), // Light green primary color
+        scaffoldBackgroundColor:  Color(0xFF222222), // Set dark background
         appBarTheme: AppBarTheme(
-          backgroundColor: Colors.black,
+          backgroundColor: Color(0xFF7318d0), // Purple header background
           elevation: 0,
         ),
       ),
@@ -81,12 +81,12 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        backgroundColor: Color.fromARGB(255, 52, 52, 52),
         elevation: 0,
         leading: Builder(
           builder: (context) {
             return IconButton(
-              icon: Icon(Icons.menu),
+              icon: Icon(Icons.menu, color: Color(0xFFE5E5E5)), // Menu icon color set to white
               onPressed: () {
                 Scaffold.of(context).openDrawer();
               },
@@ -95,18 +95,18 @@ class HomePage extends StatelessWidget {
         ),
       ),
       drawer: Drawer(
-        backgroundColor: Color(0xFF4C4C4C), // Set consistent background color
+        backgroundColor: Color(0xFF222222), // Set consistent background color
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
             DrawerHeader(
               decoration: BoxDecoration(
-                color: Color(0xFF7318d0), // Purple header background
+                color: Color.fromARGB(255, 52, 52, 52),
               ),
               child: Text(
                 'Menu',
                 style: TextStyle(
-                  color: Colors.grey,
+                  color: Colors.white,
                   fontSize: 24,
                 ),
               ),
@@ -130,7 +130,7 @@ class HomePage extends StatelessWidget {
         ),
       ),
       body: Container(
-        color: Colors.black87, // Set consistent background color
+        color: Color(0x373A40), // Set consistent background color
         child: Column(
           children: [
             Expanded(
@@ -153,7 +153,7 @@ class HomePage extends StatelessWidget {
                       Container(
                         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
                         decoration: BoxDecoration(
-                          color: Color(0xFF7ede29), // Light green background for welcome text
+                          color: Color(0xFF58CC02), // Light green background for welcome text
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Column(
@@ -191,7 +191,7 @@ class HomePage extends StatelessWidget {
                           );
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFFfc770b), // Orange button color
+                          backgroundColor: Color(0xFF1CB0F6),
                           padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(25),

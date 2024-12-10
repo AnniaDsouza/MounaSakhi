@@ -39,7 +39,7 @@ class _SelectionPageState extends State<SelectionPage> {
         ),
       ),
       body: Container(
-        color: Colors.black87, // Dark background color
+        color: Color(0xFF222222), // Dark background color
         padding: EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

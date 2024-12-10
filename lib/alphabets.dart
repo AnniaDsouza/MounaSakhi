@@ -44,7 +44,7 @@ class AlphabetsPage extends StatelessWidget {
         title: Text(selectedLanguage == 'en' ? 'Alphabets' : 'ಅಕ್ಷರಗಳು'), // Title based on selected language
       ),
       body: Container(
-        color: Colors.black87, // Set background color to black87
+        color:Color(0xFF222222), // Set background color to black87
         child: AlphabetFlipCard(isEnglish: selectedLanguage == 'en', alphabetData: alphabetData), // Pass language flag and alphabet data
       ),
     );
