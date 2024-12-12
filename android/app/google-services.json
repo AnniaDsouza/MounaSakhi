@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "802366045175",
+    "project_id": "mounasakhi-648e9",
+    "storage_bucket": "mounasakhi-648e9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:802366045175:android:b214c36d1c09617015ccf2",
+        "android_client_info": {
+          "package_name": "com.example.mouna_sakhi"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpbxxUfHuMRUMUV5iuKjMIO52XqSF-BYM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

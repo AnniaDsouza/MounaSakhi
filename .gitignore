@@ -1,3 +1,9 @@
+# Ensure all text files use LF line endings (normalize)
+* text=auto
+
+# Normalize line endings in node_modules (ensure LF for consistency)
+node_modules/* text eol=lf
+
 # Miscellaneous
 *.class
 *.log
@@ -41,3 +47,4 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
